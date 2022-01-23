@@ -20,7 +20,7 @@ mongoose.connect(connection_url, {
 })
 
 // API ENDPOINT
-app.get('/', (req, res) => res.status(200).send('Hello World!'))
+app.get('/', (req, res) => res.status(200).send('Tinder Clone Backend is Running!!!'))
 
 app.post('/tinder/cards', (req, res) => {
     const dbCard = req.body
