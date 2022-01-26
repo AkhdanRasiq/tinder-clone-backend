@@ -1,3 +1,5 @@
+import WebSocket, { WebSocketServer } from 'ws';
+import * as http from 'http';
 import express from 'express'
 import mongoose from 'mongoose'
 import Cors from 'cors'
@@ -42,17 +44,10 @@ app.get('/tinder/cards', (req, res) => {
   })
 })
 
-// LISTENER
-app.listen(port, () => console.log(`listening on localhost: ${port}`))
-
 // WEBSOCKET
 
-// const WebSocket = require('ws')
-import WebSocket, { WebSocketServer } from 'ws';
-
-var clients = [];
-
-const wss = new WebSocketServer({ port: 8000 })
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server })
 
 const getUniqueID = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -60,15 +55,23 @@ const getUniqueID = () => {
 };
 
 wss.on('connection', ws => {
-  clients.push(ws)
+  // clients.push(ws)
   const userID = getUniqueID()
   ws.send(JSON.stringify({
     userID: userID
   }))
+
   ws.on('message', message => {
-    clients.forEach((client) => {
+    wss.clients.forEach((client) => {
       console.log(`Received message => ${message}`)
-      client  .send(`${message}`)
+      client.send(`${message}`)
     })
   })
+
+  ws.on('close', () => {
+    console.log('Client Disconect!')
+  })
 })
+
+// LISTENER
+server.listen(port, () => console.log(`listening on localhost ${server.address().port}`))
