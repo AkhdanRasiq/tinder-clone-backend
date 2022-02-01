@@ -22,7 +22,12 @@ BACKEND  : [Access Link](https://tinder-backend-clone-24.herokuapp.com/)
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and Run Server for development
 ```
 npm start
+```
+
+### Compiles and hot-reloads for development
+```
+npm run start:hot-reload
 ```
